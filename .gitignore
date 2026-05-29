@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# uv
+# uv.lock is committed for reproducible installs.
+
+# Editors
+.vscode/
+
+# OS
+.DS_Store
