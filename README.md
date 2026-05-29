@@ -1,5 +1,9 @@
 # mlx-embedding-server
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Platform: macOS (Apple Silicon)](https://img.shields.io/badge/platform-macOS%20(Apple%20Silicon)-black)
+![Python: 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+
 *English | [日本語](README.ja.md)*
 
 A single-purpose HTTP server that serves multimodal embeddings via
@@ -9,12 +13,22 @@ only. Defaults to `Qwen3-VL-Embedding-2B` (image embeddings).
 It runs a heavy MLX model in a dedicated process (or on a separate machine) so
 your application only needs a thin HTTP client.
 
+Repository: <https://github.com/kiarina/mlx-embedding-server>
+
 | Property | Value |
 |----------|-------|
 | Default model | `mlx-community/Qwen3-VL-Embedding-2B-mxfp8` |
 | Output | One embedding vector per image (2048 dims for Qwen3-VL) |
 | Default port | 8900 |
 | Platform | Apple Silicon (MLX) |
+
+## Requirements
+
+- **macOS on Apple Silicon (M1 or later).** MLX runs on Apple Silicon GPUs;
+  Intel Macs, Linux, and Windows are not supported.
+- **Python 3.11+** (the repo pins 3.12 via `.python-version`).
+- [uv](https://docs.astral.sh/uv/) for dependency management.
+- Network access to Hugging Face on first run to download the model.
 
 ## Setup & run
 
