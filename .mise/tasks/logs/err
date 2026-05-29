@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#MISE description="Tail mlx-embedding-server stderr log"
+set -euo pipefail
+
+tail -f /tmp/mlx-embedding-server.err.log
+

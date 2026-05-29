@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#MISE description="Print launchd status and HTTP health"
+set -euo pipefail
+
+LABEL="${MLX_EMBEDDING_SERVICE_LABEL:-io.github.kiarina.mlx-embedding-server}"
+DOMAIN="gui/$(id -u)"
+
+launchctl print "${DOMAIN}/${LABEL}"
+echo
+curl -fsS http://localhost:8900/health
+echo

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#MISE description="Install the user launchd service for mlx-embedding-server"
+set -euo pipefail
+
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+LABEL="${MLX_EMBEDDING_SERVICE_LABEL:-io.github.kiarina.mlx-embedding-server}"
+PLIST="$HOME/Library/LaunchAgents/${LABEL}.plist"
+PYTHON="$PROJECT_DIR/.venv/bin/python"
+
+if [[ ! -x "$PYTHON" ]]; then
+  echo "Missing virtualenv Python: $PYTHON" >&2
+  echo "Run: uv sync" >&2
+  exit 1
+fi
+
+mkdir -p "$HOME/Library/LaunchAgents"
+
+cat > "$PLIST" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>${LABEL}</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>${PYTHON}</string>
+      <string>server.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>${PROJECT_DIR}</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>MLX_EMBEDDING_HOST</key>
+      <string>0.0.0.0</string>
+      <key>MLX_EMBEDDING_PORT</key>
+      <string>8900</string>
+      <key>MLX_EMBEDDING_PRELOAD</key>
+      <string>1</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/mlx-embedding-server.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/mlx-embedding-server.err.log</string>
+  </dict>
+</plist>
+PLIST
+
+plutil -lint "$PLIST"
+echo "Installed $PLIST"
